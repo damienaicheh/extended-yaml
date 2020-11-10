@@ -1,0 +1,39 @@
+trigger: none
+
+resources:
+  repositories:
+  - repository: templates
+    type: github
+    name: username/repo # Change with the username and git the repository where your common templates are
+    ref: refs/tags/v1.0.0
+    endpoint: EndPointConnection # Update with the end point connection
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+
+stages:
+  - stage: Build
+    jobs:
+    - template: job-build.yml@templates
+      parameters:
+        preBuild:
+          - task: Bash@3
+            displayName: 'Add custom configuration'
+            inputs:
+              targetType: 'inline'
+              script: |
+                echo Add a specific configuration
+          - task: Bash@3
+            displayName: 'Define application version'
+            inputs:
+              targetType: 'inline'
+              script: |
+                echo Define the application version automatically
+        postBuild:
+          - task: Bash@3
+            displayName: 'Push git tag'
+            inputs:
+              targetType: 'inline'
+              script: |
+                echo Push a tag to the Git repository      
