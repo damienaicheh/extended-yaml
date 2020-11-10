@@ -1,0 +1,39 @@
+parameters:
+  preBuild: []
+  postBuild: []
+  
+jobs:
+- job:
+  displayName: 'Build Project'
+  steps:
+    
+    - task: Bash@3
+      displayName: 'Restore packages'
+      inputs:
+        targetType: 'inline'
+        script: |
+          echo Restore all packages needed
+    - task: Bash@3
+      displayName: 'Install certificates'
+      inputs:
+        targetType: 'inline'
+        script: |
+          echo Install all the certificates needed
+     
+    - ${{ parameters.preBuild }}
+
+    - task: Bash@3
+      displayName: 'Build'
+      inputs:
+        targetType: 'inline'
+        script: |
+          echo This script represents the build tasks
+          
+    - ${{ parameters.postBuild }}
+
+    - task: Bash@3
+      displayName: 'Publish'
+      inputs:
+        targetType: 'inline'
+        script: |
+          echo This script represents the publish tasks
